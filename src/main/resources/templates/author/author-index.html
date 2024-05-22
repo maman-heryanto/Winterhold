@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+        <form class="filter" th:attr="action=@{/author/index}" method="get">
+<!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+            <input type="text" placeholder="Author Name..." name="name" th:value="${name}">
+            <button type="submit" class="blue-button">Search</button>
+        </form>
+        <a class="blue-button create-button" th:href="@{/author/upsertForm}">Add New Author</a>
+        <table>
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th>Full Name</th>
+                <th>Age</th>
+                <th>Status</th>
+                <th>Education</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td>
+                    <a class="blue-button" th:href="@{/author/book(id=*{id})}">Books</a>
+                    <a class="blue-button" th:href="@{/author/upsertForm(id=*{id})}">Edit</a>
+                    <a class="blue-button" th:href="@{/author/delete(id=*{id})}">Delete</a>
+                </td>
+                <td th:text="*{fullName}"></td>
+                <td th:text="*{age}"></td>
+                <td th:text="*{status}"></td>
+                <td th:text="*{education}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div class="pagination">
+                        <div th:text="|page ${currentPage} of ${totalPages}|"></div>
+                        <div th:if="${totalPages != 0}">
+                            <a th:each="loop:${#numbers.sequence(1, totalPages)}"
+                               th:href="@{/category/index(page=${loop},name=${name})}" th:text="${loop}"></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

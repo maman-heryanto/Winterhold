@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+  <form th:attr="action=@{/book/updateCategory}" method="post" class="upsert-form" th:object="${dto}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <table>
+      <tbody>
+      <tr>
+        <td><label>Category Name*</label></td>
+        <td>
+          <input type="text"  th:field="*{name}" readonly>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Floor *</label></td>
+        <td>
+          <input type="number" th:field="*{floor}">
+          <div class="field-validation-error" th:errors="*{floor}"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Isle*</label></td>
+        <td>
+          <input type="text" th:field="*{isle}">
+          <div class="field-validation-error" th:errors="*{isle}"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Bay*</label></td>
+        <td>
+          <input type="text" th:field="*{bay}">
+          <div class="field-validation-error" th:errors="*{bay}"></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <button class="blue-button" type="submit">Submit</button>
+    <a class="blue-button create-button" th:href="@{/book}">Back to Index</a>
+  </form>
+
+
+</main>
+</body>
+</html>

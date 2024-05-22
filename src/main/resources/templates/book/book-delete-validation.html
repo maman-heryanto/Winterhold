@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+  <div class="fail-container">
+    <p>Ada <span th:text="${totalDependent}"></span> data Loan yang ketergantungan dengan Buku ini</p>
+    <p>Anda tidak bisa Menghapus Data Ini</p>
+    <p>Menghapus data ini dapat menyebabkan masalah yang serius dikemudian hari</p>
+  </div>
+  <a class="button blue-button" th:href="@{/book/index}">Back To Book Index</a>
+
+</main>
+</body>
+</html>

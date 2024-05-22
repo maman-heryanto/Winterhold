@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winterhold</title>
+    <link rel="icon" type="image/ico" th:href="@{/favicon.png}">
+    <link rel="stylesheet" th:href="@{/resources/css/normalize.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/site.css}">
+    <script th:src="@{/resources/js/jquery-3.6.0.js}"></script>
+</head>
+<body class="main-body">
+<header th:fragment="header">
+    <div class="menu-bar">
+        <nav>
+            <a class="menu" th:href="@{/}">
+                <span>Home</span>
+            </a>
+            <a class="menu" th:href="@{/author}">
+                <span>Authors</span>
+            </a>
+            <a class="menu" th:href="@{/book}">
+                <span>Books</span>
+            </a>
+            <a class="menu" th:href="@{/customer}">
+                <span>Customers</span>
+            </a>
+            <a class="menu" th:href="@{/loan}">
+                <span>Loan</span>
+            </a>
+        </nav>
+    </div>
+    <div class="user-wrapper">
+        <div class="user">
+            <span class="full-name" th:text="${#authentication.getPrincipal().getUsername()}">anonymous</span>
+            <span class="role" >guest</span>
+        </div>
+        <div class="sign-out">
+            <form method="post" th:attr="action=@{/logout}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button type="submit">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</header>
+</body>
+</html>

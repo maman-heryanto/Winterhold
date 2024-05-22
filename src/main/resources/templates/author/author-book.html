@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+        <a class="blue-button create-button" th:href="@{/author}">Back TO Author Index</a>
+
+        <div th:object="${header}" class="header-detail">
+            <div>
+                <span>
+                    Name
+                </span>
+                <span>:</span>
+                <span th:text="*{fullName}"></span>
+            </div>
+            <div>
+                <span>
+                    Birth Date
+                </span>
+                <span>:</span>
+                <td th:text="*{birthDate}"></td>
+            </div>
+            <div>
+                <span>
+                    Decease Date
+                </span>
+                <span>:</span>
+                <span th:text="*{deceaseDate}"></span>
+            </div>
+            <div>
+                <span>
+                    Education
+                </span>
+                <span>:</span>
+                <span th:text="*{education}"></span>
+            </div>
+            <div>
+                <span>
+                    Summary
+                </span>
+                <span>:</span>
+                <span th:text="*{summary}"></span>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Category</th>
+                <th>Is Borrowed</th>
+                <th>Release Date</th>
+                <th>Total Page</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td th:text="*{bookTitle }"></td>
+                <td th:text="*{category}"></td>
+                <td th:text="*{status}"></td>
+                <td th:text="*{releaseDate}"></td>
+                <td th:text="*{totalPage}"></td>
+
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div class="pagination">
+                        <div th:text="|page ${currentPage} of ${totalPages}|"></div>
+                        <div th:if="${totalPages != 0}">
+                            <a th:each="loop:${#numbers.sequence(1, totalPages)}"
+                               th:href="@{/category/index(page=${loop},name=${name})}" th:text="${loop}"></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

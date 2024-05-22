@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{auth-layout :: head}"></head>
+<body class="authentication-body">
+<div class="authentication-wrapper">
+  <header th:replace="~{auth-layout :: header}"></header>
+  <main>
+    <h1>Sign Up</h1>
+    <form method="post" th:attr="action=@{/account/submitRegister}" th:object="${dto}">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+      <input type="text" name="username" placeholder="Username" autocomplete="off" th:field="*{username}">
+      <div class="field-validation-error" th:errors="*{username}"></div>
+
+      <input type="password" name="password" placeholder="Password" th:field="*{password}">
+      <div class="field-validation-error" th:errors="*{password}"></div>
+
+      <input type="password" name="passwordConfirmation" placeholder="Password Confirmation" th:field="*{passwordConfirmation}">
+      <div class="field-validation-error" th:errors="*{passwordConfirmation}"></div>
+      <div class="field-validation-error" th:errors="${dto}"></div>
+
+
+      <button type="submit">Sign Up</button>
+    </form>
+    <div class="link-container">
+      <a th:href="@{/account/login}">Click here to login</a>
+    </div>
+  </main>
+</div>
+</body>
+</html>

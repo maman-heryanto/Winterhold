@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+        <form class="filter" th:attr="action=@{/loan/index}" method="get">
+<!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+            <input type="text" placeholder="Book Title..." name="bookTitle" th:value="${bookTitle}">
+            <input type="text" placeholder="Customer Name..." name="customerName" th:value="${customerName}">
+            <button type="submit" class="blue-button">Search</button>
+        </form>
+        <a class="blue-button create-button" th:href="@{/loan/upsertForm}">Add New Loan</a>
+        <table>
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th>Book Title</th>
+                <th>Customer Name</th>
+                <th>Loan Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td>
+                    <a class="blue-button" th:href="@{/loan/detail(id=*{id})}">Detail</a>
+                    <a class="blue-button" th:href="@{/loan/upsertForm(id=*{id})}">Edit</a>
+                    <a th:if="*{returnDate==null}" class="blue-button" th:href="@{/loan/returnModal(id=*{id})}">Return</a>
+                    <a th:unless="*{returnDate==null}"  class="blue-button btn-disable">Return</a>
+                </td>
+                <td th:text="*{bookTitle}"></td>
+                <td th:text="*{customerName}"></td>
+                <td th:text="*{loanDate}"></td>
+                <td th:text="*{dueDate}"></td>
+                <td th:text="*{returnDate}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pagination">
+                        <div th:text="|page ${currentPage} of ${totalPages}|"></div>
+                        <div th:if="${totalPages != 0}">
+                            <a th:each="loop:${#numbers.sequence(1, totalPages)}"
+                               th:href="@{/category/index(page=${loop},name=${name})}" th:text="${loop}"></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div th:if="${upsert}" class="loan-modal">
+        <div class="contact-dialog">
+            <div >
+                <form th:attr="action=@{/loan/saveUpsert}" method="post" class="upsert-form" th:object="${dto}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="hidden" th:field="*{id}">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td><label>Customer</label></td>
+                            <td>
+                                <select th:if="*{returnDate == null}" th:field="*{customerNumber}">
+                                    <option th:value=null>Select Customer</option>
+                                    <option th:each="i : ${customerDropdown}" th:value="${i.value}" th:text="${i.text}" th:selected="${i==dto.customerNumber}"></option>
+                                    <div class="field-validation-error" th:errors="*{customerNumber}"></div>
+                                </select>
+                                <input th:unless="*{returnDate == null}" type="hidden" th:field="*{customerNumber}">
+                                <span th:unless="*{returnDate == null}" th:text="${selectedMember}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>Book</label></td>
+                            <td>
+                                <select th:if="*{returnDate == null}" th:field="*{bookCode}">
+                                    <option th:if="*{bookCode == null}" th:value=null>Select Book</option>
+                                    <option th:unless="*{bookCode == null}" th:value="*{bookCode}" th:text="${selectedBook}" selected></option>
+                                    <option th:each="i : ${bookDropdown}" th:value="${i.value}" th:text="${i.text}" th:selected="${i==dto.bookCode}"></option>
+                                    <div class="field-validation-error" th:errors="*{bookCode}"></div>
+                                </select>
+                                <input th:unless="*{returnDate == null}" type="hidden" th:field="*{bookCode}">
+                                <span th:unless="*{returnDate == null}" th:text="${selectedBook}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>Loan Date</label></td>
+                            <td>
+                                <input th:if="*{returnDate == null}" type="date" th:field="*{loanDate}">
+                                <input th:unless="*{returnDate == null}" type="hidden" th:field="*{loanDate}">
+                                <span th:unless="*{returnDate == null}" th:text="*{loanDate}"></span>
+                                <div class="field-validation-error" th:errors="*{loanDate}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textarea-label"><label>Note</label></td>
+                            <td>
+                                <textarea th:field="*{note}"></textarea>
+                                <div class="field-validation-error" th:errors="*{note}"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button class="blue-button" type="submit">Submit</button>
+                    <a class="blue-button create-button" th:href="@{/loan}">Close</a>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div th:if="${detail}" class="loan-modal">
+        <div class="contact-dialog">
+            <div class="detail-container">
+                <div>
+                    <div>
+                        <span>Book</span>
+                        <div class="content-wrapper" th:object="${data}">
+                            <div>
+                                <span> Title </span>
+                                <span>:</span>
+                                <span th:text="*{bookTitle}"></span>
+                            </div>
+                            <div>
+                                <span>Category</span>
+                                <span>:</span>
+                                <span th:text="*{bookCategory}"></span>
+                            </div>
+                            <div>
+                                <span>Author</span>
+                                <span>:</span>
+                                <span th:text="*{author}"></span>
+                            </div>
+                            <div>
+                                <span>Floor</span>
+                                <span>:</span>
+                                <span th:text="*{floor}"></span>
+                            </div>
+                            <div>
+                                <span>Isle</span>
+                                <span>:</span>
+                                <span th:text="*{isle}"></span>
+                            </div>
+                            <div>
+                                <span>Bay</span>
+                                <span>:</span>
+                                <span th:text="*{bay}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Customer</span>
+                        <div class="content-wrapper" th:object="${data}">
+                            <div>
+                                <span> Membership Number </span>
+                                <span>:</span>
+                                <span th:text="*{membershipNumber}"></span>
+                            </div>
+                            <div>
+                                <span>Full Name</span>
+                                <span>:</span>
+                                <span th:text="*{fullName}"></span>
+                            </div>
+                            <div>
+                                <span>Phone</span>
+                                <span>:</span>
+                                <span th:text="*{phone}"></span>
+                            </div>
+                            <div>
+                                <span>Membership Expire Date</span>
+                                <span>:</span>
+                                <span th:text="*{memberExpiredDate}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="blue-button create-button" th:href="@{/loan}">Back to Index</a>
+            </div>
+
+        </div>
+    </div>
+
+    <div th:if="${returnBook}" class="loan-modal">
+        <div class="contact-dialog">
+
+            <div class="detail-container">
+                <div>
+                    <span>Apakah anda yakin ingin mengembalikan buku?</span>
+                </div>
+                <a class="blue-button" th:href="@{/loan/return(membershipNumber=${selectedLoan})}">Ya</a>
+                <a class="blue-button" th:href="@{/loan}">Tidak</a>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+</body>
+</html>

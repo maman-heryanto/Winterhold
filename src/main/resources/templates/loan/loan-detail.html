@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="detail-container">
+        <div>
+            <div>
+                <span>Book</span>
+                <div class="content-wrapper" th:object="${data}">
+                    <div>
+                        <span> Title </span>
+                        <span>:</span>
+                        <span th:text="*{bookTitle}"></span>
+                    </div>
+                    <div>
+                        <span>Category</span>
+                        <span>:</span>
+                        <span th:text="*{bookCategory}"></span>
+                    </div>
+                    <div>
+                        <span>Author</span>
+                        <span>:</span>
+                        <span th:text="*{author}"></span>
+                    </div>
+                    <div>
+                        <span>Floor</span>
+                        <span>:</span>
+                        <span th:text="*{floor}"></span>
+                    </div>
+                    <div>
+                        <span>Isle</span>
+                        <span>:</span>
+                        <span th:text="*{isle}"></span>
+                    </div>
+                    <div>
+                        <span>Bay</span>
+                        <span>:</span>
+                        <span th:text="*{bay}"></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <span>Customer</span>
+                <div class="content-wrapper" th:object="${data}">
+                    <div>
+                        <span> Membership Number </span>
+                        <span>:</span>
+                        <span th:text="*{membershipNumber}"></span>
+                    </div>
+                    <div>
+                        <span>Full Name</span>
+                        <span>:</span>
+                        <span th:text="*{fullName}"></span>
+                    </div>
+                    <div>
+                        <span>Phone</span>
+                        <span>:</span>
+                        <span th:text="*{phone}"></span>
+                    </div>
+                    <div>
+                        <span>Membership Expire Date</span>
+                        <span>:</span>
+                        <span th:text="*{memberExpiredDate}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="blue-button create-button" th:href="@{/loan}">Back to Index</a>
+    </div>
+
+</main>
+</body>
+</html>

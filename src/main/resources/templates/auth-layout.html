@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+  <meta charset="UTF-8">
+  <title>Winterhold</title>
+  <link rel="icon" th:href="@{/favicon.png}" type="image/ico">
+  <link rel="stylesheet" th:href="@{/resources/css/normalize.css}">
+  <link rel="stylesheet" th:href="@{/resources/css/font-awesome.css}">
+  <link rel="stylesheet" th:href="@{/resources/css/site.css}">
+  <script th:src="@{/resources/js/jquery-3.6.0.js}"></script>
+  <script th:src="@{/resources/js/site.js}" defer></script>
+</head>
+<body>
+<header th:fragment="header" class="company-logo">
+  <img th:src="@{/resources/image/logo.png}" alt="Basilisk">
+  <h1>
+    Trade of <span class="bold">Winterhold</span>
+  </h1>
+</header>
+</body>
+</html>

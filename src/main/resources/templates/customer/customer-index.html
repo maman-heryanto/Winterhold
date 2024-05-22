@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+        <form class="filter" th:attr="action=@{/customer/index}" method="get">
+<!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+            <input type="text" placeholder="Membership number..." name="membershipNumber" th:value="${membershipNumber}">
+            <input type="text" placeholder="Membership Name..." name="name" th:value="${name}">
+            <button type="submit" class="blue-button">Search</button>
+        </form>
+        <a class="blue-button create-button" th:href="@{/customer/upsertForm}">Add New Customer</a>
+        <table>
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th>Membership Number</th>
+                <th>Full Name</th>
+                <th>Expire Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td>
+                    <a class="blue-button" th:href="@{/customer/upsertForm(membershipNumber=*{membershipNumber})}">Edit</a>
+                    <a class="blue-button" th:href="@{/customer/delete(membershipNumber=*{membershipNumber})}">Delete</a>
+                    <a class="blue-button" th:href="@{/customer/extendModal(membershipNumber=*{membershipNumber})}">Extend</a>
+                </td>
+                <td th:text="*{membershipNumber}"></td>
+                <td th:text="*{fullName}"></td>
+                <td th:text="*{membershipExpireDate}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div class="pagination">
+                        <div th:text="|page ${currentPage} of ${totalPages}|"></div>
+                        <div th:if="${totalPages != 0}">
+                            <a th:each="loop:${#numbers.sequence(1, totalPages)}"
+                               th:href="@{/category/index(page=${loop},name=${name})}" th:text="${loop}"></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div th:if="${extend}" class="loan-modal">
+        <div class="contact-dialog">
+
+            <div class="detail-container">
+                <div>
+                    <span>Apakah anda yakin ingin memperpanjang membership?</span>
+                </div>
+                <a class="blue-button" th:href="@{/customer/extend(membershipNumber=${selectedMember})}">Ya</a>
+                <a class="blue-button" th:href="@{/customer}">Tidak</a>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+</body>
+</html>
